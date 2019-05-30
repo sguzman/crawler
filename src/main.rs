@@ -15,7 +15,7 @@ fn main() {
     for url in urls {
         println!("Calling {}", url);
         let input: &str = url.as_str();
-        let url_obj: url::Url = url::Url::parse(input).expect("Could not parse url");
+        let _url: url::Url = url::Url::parse(input).expect("Could not parse url");
 
         let url: &str = url.as_str();
         let document: String = reqwest::get(url)
