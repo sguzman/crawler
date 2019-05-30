@@ -1,0 +1,13 @@
+[package]
+name = "crawler"
+version = "0.1.0"
+authors = ["Salvador Guzman <guzmansalv@gmail.com>"]
+edition = "2018"
+
+[[bin]]
+name = "crwl"
+path = "src/main.rs"
+
+[dependencies]
+reqwest = "0.9.17"
+scraper = "0.10.0"
