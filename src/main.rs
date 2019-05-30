@@ -1,13 +1,22 @@
 extern crate reqwest;
 extern crate scraper;
+extern crate url;
+
+pub fn path_filter(href: &str) -> bool {
+    let pat: &'static str = "/";
+    !href.starts_with(pat) || href == pat
+}
 
 fn main() {
     let urls: Vec<String> = std::env::args().skip(1).collect();
-    let mut paths: std::collections::HashSet<&str> =
+    let mut paths: std::collections::HashSet<String> =
         std::collections::HashSet::new();
 
     for url in urls {
         println!("Calling {}", url);
+        let input: &str = url.as_str();
+        let url_obj: url::Url = url::Url::parse(input).expect("Could not parse url");
+
         let url: &str = url.as_str();
         let document: String = reqwest::get(url)
             .expect("Request failed")
@@ -16,22 +25,24 @@ fn main() {
         let document: &str = document.as_str();
 
         let doc: scraper::Html = scraper::Html::parse_document(document);
-        let select: scraper::Selector =
+        let selector: scraper::Selector =
             scraper::Selector::parse("a[href]")
                 .expect("Failed to parse links");
 
-        for element in doc.select(&select) {
+        for element in doc.select(&selector) {
             let href: &str =
                 element.value().attr("href").expect("Could not find attr{href}");
 
-            let pat: &'static str = "/";
-            if !href.starts_with(pat) {
+            if path_filter(href) {
                 continue;
             }
+
+            let value: String = href.to_string().clone();
+            paths.insert(value);
         }
     }
 
-    for s in paths {
+    for s in &paths {
         println!("{}", s);
     }
 
