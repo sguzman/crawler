@@ -13,7 +13,7 @@ fn main() {
         std::collections::HashSet::new();
 
     for url in urls {
-        println!("Calling {}", url);
+        eprintln!("Calling {}", url);
         let input: &str = url.as_str();
         let _url: url::Url = url::Url::parse(input).expect("Could not parse url");
 
@@ -46,5 +46,5 @@ fn main() {
         println!("{}", s);
     }
 
-    println!("# of paths {}", paths.len());
+    eprintln!("{}", paths.len());
 }
